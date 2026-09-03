@@ -16,6 +16,20 @@ Claude Code 의 사용량(5시간 세션 · 주간 한도)을 화면 구석에 �
 
 사용량은 로컬 로그를 세는 추정치가 아니라 Claude 서버가 주는 실제 값이다.
 
+<p align="center">
+  <img src="docs/screenshots/working.png" width="380" alt="작업 중 — 안전모에 망치">
+  <img src="docs/screenshots/needs-input.png" width="380" alt="입력 필요 — 말풍선을 띄우고 계속 뛴다">
+</p>
+<p align="center">
+  <img src="docs/screenshots/tool-failed.png" width="380" alt="도구 실패 — 눈이 X">
+  <img src="docs/screenshots/done.png" width="380" alt="전체 완료">
+</p>
+<p align="center">
+  <img src="docs/screenshots/menubar.png" height="24" alt="메뉴바 아이콘 — 원형=5시간, 사각형=주간">
+  &nbsp;&nbsp;
+  <img src="docs/screenshots/settings.png" width="300" alt="설정창">
+</p>
+
 > *English:* a floating usage widget for Claude Code (5-hour / weekly limits) with a pixel pet that
 > reacts to Claude Code hook events. Windows and macOS, one codebase. Python 3.10+.
 
