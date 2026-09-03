@@ -1,0 +1,89 @@
+{
+  "bg": "#26201e",
+  "fg_label": "#ffffff",
+  "fg_time": "#00ff00",
+  "fg_ok": "#ff8040",
+  "fg_warn": "#e8b34a",
+  "fg_crit": "#ef4444",
+  "font_family": "Cascadia Mono",
+  "font_size": 11,
+  "opacity": 1.0,
+  "topmost": true,
+  "poll_minutes": 5,
+  "warn_at": 20,
+  "crit_at": 5,
+  "pet_enabled": true,
+  "pet_size": 22,
+  "pet_speed": 1,
+  "pet_color_mode": "fixed",
+  "pet_color": "#ff8040",
+  "pet_bubble_enabled": true,
+  "pet_bubble_mode": "always",
+  "pet_bubble_messages": [
+    "Superbin"
+  ],
+  "states": {
+    "session_start": {
+      "msg": "시작합니다",
+      "act": "jump",
+      "hold": 6
+    },
+    "working": {
+      "msg": "작업중....",
+      "act": "gear",
+      "hold": 0
+    },
+    "needs_input": {
+      "msg": "검토부탁드립니다.",
+      "act": "jump_loop",
+      "hold": 0
+    },
+    "permission_denied": {
+      "msg": "알겠습니다",
+      "act": "none",
+      "hold": 6
+    },
+    "tool_failed": {
+      "msg": "$#(@#)&",
+      "act": "dead",
+      "hold": 8
+    },
+    "subagent": {
+      "msg": "협업중!",
+      "act": "gear",
+      "hold": 0
+    },
+    "task_done": {
+      "msg": "하나 끝",
+      "act": "jump",
+      "hold": 6
+    },
+    "compacting": {
+      "msg": "정리 중...",
+      "act": "gear",
+      "hold": 0
+    },
+    "model_switch": {
+      "msg": "갈아탔습니다",
+      "act": "none",
+      "hold": 6
+    },
+    "done": {
+      "msg": "모든 작업 완료",
+      "act": "jump",
+      "hold": 8
+    },
+    "failed": {
+      "msg": "$#(@#)&",
+      "act": "dead",
+      "hold": 8
+    },
+    "idle": {
+      "msg": "",
+      "act": "none",
+      "hold": 0
+    }
+  },
+  "x": null,
+  "y": null
+}

@@ -1,0 +1,12 @@
+# 로컬 상태
+config.json
+widget-state.json
+
+# 파이썬
+__pycache__/
+*.pyc
+.venv/
+
+# macOS — install.py 가 이 기기의 파이썬 경로를 박아 만든다
+Claude Usage Tray.app/
+.DS_Store
