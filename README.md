@@ -110,6 +110,9 @@ Claude Code 를 한동안 안 쓰면 토큰이 만료된 채 남아 `?` 가 뜰 
 | `install.py` | 의존성 · 훅 · 맥 앱 번들 |
 | `run.vbs` `debug.cmd` | 윈도우 실행기 |
 | `run.command` | 맥 실행기 (터미널) |
+| `requirements.txt` | 의존성. 플랫폼 마커로 윈도우·맥 분기 |
+| `config.example.json` | 설정 예시 (클레이 프리셋). 실제 설정은 `config.json` 에 저장되고 git 에는 안 올라간다 |
+| `log_docs/` | 작업 로그 |
 
 ## 플랫폼 메모
 
@@ -131,3 +134,7 @@ Claude Code 를 한동안 안 쓰면 토큰이 만료된 채 남아 `?` 가 뜰 
 - 설정창 안의 위젯은 전부 ttk 다. classic Tk 위젯은 `ttk.Notebook` 탭 안에서 안 그려지는 환경이 있다
 - `sv-ttk` 와 `pywinstyles` 가 없어도 동작한다. 설정창 외형만 Tk 기본으로 떨어진다
 - 윈도우 11 + Python 3.12, macOS (Tk 9.0) + Python 3.14 에서 확인했다
+
+## 라이선스
+
+MIT

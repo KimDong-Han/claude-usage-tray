@@ -1,26 +1,28 @@
 {
   "bg": "#26201e",
-  "fg_label": "#ffffff",
-  "fg_time": "#00ff00",
-  "fg_ok": "#ff8040",
+  "fg_label": "#a1897d",
+  "fg_time": "#8b7469",
+  "fg_ok": "#d97757",
   "fg_warn": "#e8b34a",
   "fg_crit": "#ef4444",
-  "font_family": "Cascadia Mono",
-  "font_size": 11,
+  "font_family": "Helvetica Neue",
+  "font_size": 10,
   "opacity": 1.0,
   "topmost": true,
+  "tray_icons": true,
   "poll_minutes": 5,
   "warn_at": 20,
   "crit_at": 5,
   "pet_enabled": true,
-  "pet_size": 22,
-  "pet_speed": 1,
+  "pet_size": 26,
+  "pet_speed": 2,
+  "pet_max": 3,
   "pet_color_mode": "fixed",
-  "pet_color": "#ff8040",
+  "pet_color": "#d97757",
   "pet_bubble_enabled": true,
-  "pet_bubble_mode": "always",
+  "pet_bubble_mode": "click",
   "pet_bubble_messages": [
-    "Superbin"
+    "5H {5h}  ·  7D {7d}"
   ],
   "states": {
     "session_start": {
@@ -29,7 +31,7 @@
       "hold": 6
     },
     "working": {
-      "msg": "작업중....",
+      "msg": "",
       "act": "gear",
       "hold": 0
     },
@@ -49,7 +51,7 @@
       "hold": 8
     },
     "subagent": {
-      "msg": "협업중!",
+      "msg": "도우미 투입",
       "act": "gear",
       "hold": 0
     },
@@ -83,7 +85,5 @@
       "act": "none",
       "hold": 0
     }
-  },
-  "x": null,
-  "y": null
+  }
 }
