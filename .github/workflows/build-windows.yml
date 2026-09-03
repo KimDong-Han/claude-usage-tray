@@ -1,0 +1,45 @@
+# v* 태그를 푸시하면 GitHub 의 윈도우 러너가 exe 를 만들어 Release 에 붙인다.
+# 맥에서는 윈도우 exe 를 못 만들기 때문에 여기서 한다.
+name: build-windows
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 의존성
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pyinstaller
+      - name: exe 빌드
+        # sv_ttk 는 tcl 테마 파일을 데이터로 들고 있어 collect-all 이 필요하다
+        run: >
+          pyinstaller --noconsole --onefile --name ClaudeUsageTray
+          --collect-all sv_ttk
+          --hidden-import hook --hidden-import install
+          tray.py
+      - name: 동작 확인 (--hook 모드)
+        run: |
+          .\dist\ClaudeUsageTray.exe --hook needs_input
+          type $env:USERPROFILE\.claude\usage-tray-agent-state.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ClaudeUsageTray-windows
+          path: dist/ClaudeUsageTray.exe
+      - name: Release 에 첨부
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/ClaudeUsageTray.exe
+          generate_release_notes: true

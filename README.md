@@ -35,6 +35,22 @@ Claude Code 의 사용량(5시간 세션 · 주간 한도)을 화면 구석에 �
 
 ## 설치
 
+### 윈도우 — exe 로 (파이썬 없이)
+
+[Releases](https://github.com/KimDong-Han/claude-usage-tray/releases) 에서 `ClaudeUsageTray.exe` 를 받아
+원하는 폴더에 두고, 그 폴더에서 한 번:
+
+```
+ClaudeUsageTray.exe --install-hooks
+```
+
+이후엔 exe 를 더블클릭하면 뜬다. 설정(`config.json`)은 exe 옆에 저장된다. 훅을 빼려면
+`--remove-hooks`. 서명이 없어서 처음 실행할 때 SmartScreen 경고가 뜨는데 "추가 정보 → 실행"
+으로 넘어가면 된다. exe 는 GitHub Actions 의 윈도우 러너가 `.github/workflows/build-windows.yml`
+대로 빌드한 것이다.
+
+### 소스로 (윈도우 · 맥 공통)
+
 파이썬 3.10 이상. 폴더를 원하는 곳에 두고 한 번:
 
 ```

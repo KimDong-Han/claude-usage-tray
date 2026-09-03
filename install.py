@@ -18,7 +18,8 @@ import sys
 import time
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent
+FROZEN = bool(getattr(sys, "frozen", False))        # PyInstaller exe 안에서 실행 중
+BASE_DIR = Path(sys.executable).resolve().parent if FROZEN else Path(__file__).resolve().parent
 HOOK_SCRIPT = str(BASE_DIR / "hook.py")
 SETTINGS = Path.home() / ".claude" / "settings.json"
 IS_MAC = sys.platform == "darwin"
@@ -108,8 +109,20 @@ def install_deps() -> None:
         print("! pip 설치 실패. 위 오류를 확인하세요")
 
 
+def hook_command() -> tuple[str, list[str]]:
+    """훅이 실행할 (명령, 앞쪽 인자). exe 는 자기 자신을 --hook 모드로 부른다."""
+    if FROZEN:
+        return str(Path(sys.executable).resolve()), ["--hook"]
+    return runner(), [HOOK_SCRIPT]
+
+
 def is_ours(hook: dict) -> bool:
-    return (hook.get("args") or [])[:1] == [HOOK_SCRIPT]
+    args = hook.get("args") or []
+    if args[:1] == [HOOK_SCRIPT]:
+        return True
+    # exe 로 등록한 항목: 명령이 우리 exe 이고 첫 인자가 --hook
+    name = (hook.get("command") or "").replace("\\", "/").rsplit("/", 1)[-1].lower()
+    return args[:1] == ["--hook"] and name.startswith("claudeusagetray")
 
 
 def strip_ours(hooks: dict) -> int:
@@ -143,12 +156,12 @@ def write_hooks(remove_only: bool = False) -> None:
     print("기존 항목 제거:", strip_ours(hooks), "개")
 
     if not remove_only:
-        python = runner()
+        command, lead = hook_command()
         for event, matcher, state, delta in WIRING:
-            args = [HOOK_SCRIPT, state] + ([delta] if delta else [])
+            args = lead + [state] + ([delta] if delta else [])
             hooks.setdefault(event, []).append({
                 "matcher": matcher,
-                "hooks": [{"type": "command", "command": python,
+                "hooks": [{"type": "command", "command": command,
                            "args": args, "async": True, "timeout": 5}],
             })
         print("등록:", len(WIRING), "개")

@@ -46,7 +46,9 @@ except ImportError:
 if not IS_WIN:
     pywinstyles = None
 
-BASE_DIR = Path(__file__).resolve().parent
+FROZEN = bool(getattr(sys, "frozen", False))        # PyInstaller exe 안에서 실행 중
+# exe 는 임시 폴더에 풀려서 __file__ 이 쓸모없다. 설정은 exe 옆에 둔다
+BASE_DIR = Path(sys.executable).resolve().parent if FROZEN else Path(__file__).resolve().parent
 CREDENTIALS = Path.home() / ".claude" / ".credentials.json"
 USAGE_URL = "https://api.anthropic.com/api/oauth/usage"
 CACHE_FILE = Path.home() / ".claude" / "swiftbar" / ".claude-usage-windows.json"
@@ -387,16 +389,19 @@ def toggle_autostart(*_args) -> None:
     if autostart_enabled():
         STARTUP_LINK.unlink(missing_ok=True)
         return
-    pythonw = Path(sys.executable).with_name("pythonw.exe")
-    runner = pythonw if pythonw.exists() else Path(sys.executable)
-    script = Path(__file__).resolve()
+    if FROZEN:
+        command = f'q & "{Path(sys.executable).resolve()}" & q'
+    else:
+        pythonw = Path(sys.executable).with_name("pythonw.exe")
+        runner = pythonw if pythonw.exists() else Path(sys.executable)
+        command = f'q & "{runner}" & q & " " & q & "{Path(__file__).resolve()}" & q'
     STARTUP_DIR.mkdir(parents=True, exist_ok=True)
     # wscript가 이 파일을 ANSI로 읽으므로 내용은 ASCII만 쓴다
     STARTUP_LINK.write_text(
         'Dim sh, q\n'
         'Set sh = CreateObject("WScript.Shell")\n'
         'q = Chr(34)\n'
-        f'sh.Run q & "{runner}" & q & " " & q & "{script}" & q, 0, False\n',
+        f'sh.Run {command}, 0, False\n',
         encoding="utf-8",
     )
 
@@ -1914,6 +1919,17 @@ def print_once() -> None:
 
 
 if __name__ == "__main__":
+    argv = sys.argv[1:]
+    # exe 배포용 부가 모드. 파이썬 없는 PC 에서 hook.py / install.py 역할을 exe 가 대신한다
+    if argv[:1] == ["--hook"]:
+        import hook
+        hook.record(argv[1] if len(argv) > 1 else "idle", argv[2] if len(argv) > 2 else None)
+        sys.exit(0)
+    if argv[:1] in (["--install-hooks"], ["--remove-hooks"]):
+        import install
+        install.write_hooks(remove_only=argv[0] == "--remove-hooks")
+        sys.exit(0)
+
     load_config()
     if "--once" in sys.argv:
         print_once()

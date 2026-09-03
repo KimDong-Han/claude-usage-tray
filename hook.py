@@ -10,6 +10,8 @@
 아는 상태 이름인지는 앱이 판단한다. 훅은 Claude Code 를 붙잡으면 안 되므로
 하는 일을 최소로 유지한다.
 """
+from __future__ import annotations
+
 import json
 import re
 import sys
@@ -19,10 +21,11 @@ from pathlib import Path
 STATE_FILE = Path.home() / ".claude" / "usage-tray-agent-state.json"
 MAX_AGENTS = 16  # 훅을 놓쳐 카운터가 새더라도 끝없이 늘지 않게
 
-state = sys.argv[1] if len(sys.argv) > 1 else "idle"
-delta = sys.argv[2] if len(sys.argv) > 2 else None
 
-if re.fullmatch(r"[a-z_]{1,32}", state):
+def record(state: str, delta: str | None) -> None:
+    """상태 파일을 쓴다. tray.py 의 --hook 모드(exe 배포)도 이 함수를 부른다."""
+    if not re.fullmatch(r"[a-z_]{1,32}", state):
+        return
     current = 0
     try:
         current = int(json.loads(STATE_FILE.read_text(encoding="utf-8")).get("agents", 0))
@@ -45,3 +48,8 @@ if re.fullmatch(r"[a-z_]{1,32}", state):
             encoding="utf-8")
     except OSError:
         pass
+
+
+if __name__ == "__main__":
+    record(sys.argv[1] if len(sys.argv) > 1 else "idle",
+           sys.argv[2] if len(sys.argv) > 2 else None)
